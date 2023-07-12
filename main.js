@@ -1,8 +1,10 @@
 console.log("Hi");
 
 const randomizeBtn = document.getElementById("random");
+const checkButton = document.getElementById("check");
 const image = document.getElementById("image");
 const image2 = document.getElementById("image2");
+const image3 = document.getElementById("image3");
 
 const SHOW_CONTROL = false;
 
@@ -29,6 +31,13 @@ function randomize(){
     cube.reset();
     cube.doScramble(scramble);
     image2.src = cube.getSource();
+
+    image3.style.display = "none";
+    image3.src = cube.getOrientedMask();
+}
+
+function showAnswer(){
+    image3.style.display = "block";
 }
 
 function test() {
@@ -38,6 +47,7 @@ function test() {
 }
 
 randomizeBtn.addEventListener("click", randomize);
+checkButton.addEventListener("click", showAnswer);
 
 randomize();
 // test();
