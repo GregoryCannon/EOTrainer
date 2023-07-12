@@ -17,7 +17,6 @@ const SLICES = {
 class Cube {
     constructor(){
         this.reset();
-        console.log(this.edges);
     }
 
     reset(){
@@ -48,7 +47,6 @@ class Cube {
     }
 
     doTurnInternal(turn){
-        console.log("doTurnInternal", turn);
         this.cycleStickers(SLICES[turn]);
         this.cycleStickers(SPINS[turn]);
     }
@@ -81,8 +79,6 @@ class Cube {
         // F edges
         str[19] = this.edges[8];
         str[23] = this.edges[9];
-
-        console.log("generated str:", str);
 
         return `https://visualcube.api.cubing.net/visualcube.php?fmt=svg&r=y35x-30&fd=${str.join("")}&bg=t`
     }

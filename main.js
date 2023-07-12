@@ -4,6 +4,8 @@ const randomizeBtn = document.getElementById("random");
 const image = document.getElementById("image");
 const image2 = document.getElementById("image2");
 
+const SHOW_CONTROL = false;
+
 const SNIPPETS = ["R", "R'", "R2", "U", "U'", "U2", "F' U F", "B U2 B'", "F R' F'", "B' R B", "F' B U' F B'", "F B' R F' B"];
 const cube = new Cube();
 
@@ -18,7 +20,11 @@ function randomize(){
     }
 
     console.log(scramble);
-    image.src = `https://visualcube.api.cubing.net/visualcube.php?fmt=svg&r=y35x-30&alg=${scramble}&bg=t`
+    if (SHOW_CONTROL){
+        image.src = `https://visualcube.api.cubing.net/visualcube.php?fmt=svg&r=y35x-30&alg=${scramble}&bg=t`
+    } else {
+        image.style = "display: none";
+    }
 
     cube.reset();
     cube.doScramble(scramble);
