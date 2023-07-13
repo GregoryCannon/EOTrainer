@@ -1,5 +1,3 @@
-console.log("Hi");
-
 const randomizeBtn = document.getElementById("random");
 const checkButton = document.getElementById("check");
 const scrambleType = document.getElementById("scramble-type");
@@ -13,10 +11,19 @@ const SHOW_CONTROL = false;
 
 const SNIPPETS = ["R U'", "R' U2", "U' R2", "U R", "U' R", "U2 R'", "F' U2 F", "B U B'", "F' U F", "B U2 B'", "F R' F'", "B' R B", "F' B U' F B'", "F B' R F' B"];
 const SCRAMBLE_LENGTH = 8;
-const cube = new Cube();
+const CASE_BEGINNER_INSERTED = "beginner-inserted";
+const CASE_PETRUS = "petrus";
+const CASE_BAD_U = "bad-u";
+const CASE_BAD_R = "bad-r";
+const CASE_ORIENTED_U = "oriented-u";
+const CASE_ORIENTED_R = "oriented-r";
 
 function isBeginnerAPB(){
     return scrambleType.value == "apb-beginner";
+}
+
+function isAdvancedAPB(){
+    return scrambleType.value == "apb-full";
 }
 
 function getPetrusScramble(){
@@ -45,6 +52,7 @@ function getBeginnerAPBScramble(){
         testCube.doTurn(move);
         scramble += move + " ";
     }
+    // Insert to BR one of two ways depending on its orientation
     if (testCube.edges[UR_EDGE_INDEX] == 'b'){
         testCube.doTurn("R");
         scramble += "R ";
@@ -54,6 +62,56 @@ function getBeginnerAPBScramble(){
     }
 
     return scramble;
+}
+
+function getAdvancedAPBScramble(){
+    const testCube = new Cube();
+    let scramble = getPetrusScramble();
+    testCube.reset();
+    testCube.doScramble(scramble);
+
+    const doMoves = (moves) => {
+        testCube.doScramble(moves);
+        scramble += moves + " ";
+    }
+
+    // Move BR edge to UR position
+    const UR_EDGE_INDEX = 1;
+    for (const move of "UUURRR"){
+        if (testCube.isBREdge(UR_EDGE_INDEX)){
+            break;
+        }
+        testCube.doTurn(move);
+        scramble += move + " ";
+    }
+    /* Insert to one of four places based on what case group we want to make.
+        EOPair cases are split into 4 groups:
+        - Oriented, U (edge in UF)
+        - Oriented, R (edge in FR)
+        - Misoriented, U (edge in UB)
+        - Misoriented, R (edge in BR)
+        We will keep the existing orientation and pick between U/R at random.
+    */
+    const isR = Math.random() > 0.5;
+    if (testCube.edges[UR_EDGE_INDEX] == 'b'){
+        // Oriented
+        if (isR){
+            doMoves("R'");
+            return [scramble, CASE_ORIENTED_R];
+        } else {
+            doMoves("U");
+            return [scramble, CASE_ORIENTED_U];
+        }
+    } else {
+        // Misoriented
+        if (isR){
+            doMoves("R");
+            return [scramble, CASE_BAD_R];
+        } else {
+            doMoves("U'");
+            return [scramble, CASE_BAD_U];
+        }
+    }
 }
 
 function annotationToCount(annotation){
@@ -105,18 +163,28 @@ function cleanScramble(scramble) {
     let prevIteration = null;
     let result = scramble;
     while (result !== prevIteration){
-        console.log("Recursing...");
+        console.log("Cleaning...");
         prevIteration = result;
         result = cleanScrambleInternal(prevIteration);
     }
-    console.log("clean scramble:", cleanScramble);
+    console.log("clean scramble:", result);
     return result;
 }
 
 function randomize() {
-    console.log("Random clicked");
-
-    const scramble = isBeginnerAPB() ? getBeginnerAPBScramble() : getPetrusScramble();
+    let scramble;
+    let caseGroup;
+    if (isAdvancedAPB()){
+        const response = getAdvancedAPBScramble();
+        console.log(response);
+        [scramble, caseGroup] = response;
+    } else if (isBeginnerAPB()){
+        scramble = getBeginnerAPBScramble();
+        caseGroup = CASE_BEGINNER_INSERTED;
+    } else {
+        scramble = getPetrusScramble();
+        caseGroup = CASE_PETRUS;
+    }
 
     console.log(scramble);
     if (SHOW_CONTROL){
@@ -125,9 +193,9 @@ function randomize() {
         image.style = "display: none";
     }
 
-    cube.reset();
+    const cube = new Cube();
     cube.doScramble(scramble);
-    image2.src = cube.getSource(isBeginnerAPB());
+    image2.src = cube.getSource(caseGroup);
     scrambleDiv.innerHTML = cleanScramble(scramble);
 
     image3.style.display = "none";
@@ -138,18 +206,21 @@ function showAnswer(){
     image3.style.display = "block";
 }
 
-function test() {
-    cube.reset();
-    cube.doScramble("F B' R F' B");
-    image.src = cube.getSource(isBeginnerAPB());
+function updateScrambleVisibility(){
+    scrambleDiv.style.display = showScramble.checked ? "block" : "none";
 }
 
-showScramble.addEventListener("change", () => {
-    scrambleDiv.style.display = showScramble.checked ? "block" : "none";
-})
+function test() {
+    const cube = new Cube();
+    cube.doScramble("F B' R F' B");
+    image.src = cube.getSource(CASE_PETRUS);
+}
+
+showScramble.addEventListener("change", updateScrambleVisibility);
 randomizeBtn.addEventListener("click", randomize);
 checkButton.addEventListener("click", showAnswer);
 
+updateScrambleVisibility();
 randomize();
 // test();
 

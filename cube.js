@@ -150,20 +150,32 @@ class Cube {
         }
     }
 
-    getSource(isBeginnerAPB){
-        let str = "oooouooooooooroooooooffoffo".split("");
+    getSource(caseGroup){
+        console.log("Case group:", caseGroup);
+        let vcStringRaw = "oooouooooooooroooooooffoffo";
 
-        if (isBeginnerAPB){
-            str[17] = 'r'
+        switch(caseGroup){
+            case CASE_BEGINNER_INSERTED:
+                vcStringRaw = "oooouooooooooroooroooffoffo"; break;
+            case CASE_ORIENTED_R:
+                vcStringRaw = "oooouooodroooroooooobffoffo"; break;
+            case CASE_ORIENTED_U:
+                vcStringRaw = "oooouooobdoooroooooorffoffo"; break;
+            case CASE_BAD_R:
+                vcStringRaw = "oodouooooooboroooroooffoffo"; break;
+            case CASE_BAD_U:
+                vcStringRaw = "oorouoooooodoroooroooffoffo"; break;
+
         }
 
+        const vcString = vcStringRaw.split("");
         // This mapping is super manual because the internal model of the edges
         // follows BLD standard ordering, and VisualCube uses a weird order I don't like
 
         for (const edgeIndex of DISPLAYED_EDGES){
-            str[this.getVcStringIndexForEdge(edgeIndex)] = this.edges[edgeIndex];
+            vcString[this.getVcStringIndexForEdge(edgeIndex)] = this.edges[edgeIndex];
         }
 
-        return `https://visualcube.api.cubing.net/visualcube.php?fmt=svg&r=y35x-30&fd=${str.join("")}&bg=t`
+        return `https://visualcube.api.cubing.net/visualcube.php?fmt=svg&r=y35x-30&fd=${vcString.join("")}&bg=t`
     }
 }
