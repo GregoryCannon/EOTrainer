@@ -1,20 +1,39 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <link rel="stylesheet" href="main.css">
+      </head> 
     <body>
         <h1>EO Trainer</h1>
 
         <img id="image">
         <br/>
-        <img id="image2">
-        <br/>
-        <img id="image3">
 
-        <br/>
-        Scramble type: <select id="scramble-type">
-            <option value="apb-beginner">APB Pair Inserted</option>
-            <option value="petrus">Petrus</option>
-        </select>
-        <br/>
+        <div class="images">
+            <img id="image2">   
+            <img id="image3">
+        </div>
+        
+        <div style="font-family: Arial, Helvetica, sans-serif;" id="scramble"></div>
+
+        <div class="settings">
+            
+            <div class="settings-row">
+                Scramble type: <select id="scramble-type">
+                    <option value="apb-beginner">APB Pair Inserted</option>
+                    <option value="petrus">Petrus</option>
+                </select>
+            </div>
+            <div class="settings-row slider">
+                <label for="scramble-length">Scramble length:</label>
+                <input type="range" id="scramble-length" min="2" max="10" value="5" class="slider" id="myRange">
+            </div>
+            <div class="settings-row">
+                <input type="checkbox" id="show-scramble">
+                <label for="show-scramble">Show scramble?</label>
+            </div>
+        </div>
+
         <br/>
         <button id="random">Randomize</button>
         <button id="check">Check answer</button>

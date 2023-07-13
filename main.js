@@ -6,10 +6,13 @@ const scrambleType = document.getElementById("scramble-type");
 const image = document.getElementById("image");
 const image2 = document.getElementById("image2");
 const image3 = document.getElementById("image3");
-
+const scrambleDiv = document.getElementById("scramble");
+const scrambleLength = document.getElementById("scramble-length");
+const showScramble = document.getElementById("show-scramble");
 const SHOW_CONTROL = false;
 
-const SNIPPETS = ["R", "R'", "R2", "U", "U'", "U2", "F' U F", "B U2 B'", "F R' F'", "B' R B", "F' B U' F B'", "F B' R F' B"];
+const SNIPPETS = ["R U'", "R' U2", "U' R2", "U R", "U' R", "U2 R'", "F U2 F'", "B U B'", "F' U F", "B U2 B'", "F R' F'", "B' R B", "F' B U' F B'", "F B' R F' B"];
+const SCRAMBLE_LENGTH = 8;
 const cube = new Cube();
 
 function isBeginnerAPB(){
@@ -18,7 +21,8 @@ function isBeginnerAPB(){
 
 function getPetrusScramble(){
     let scramble = "";
-    for (let i = 0; i < 8; i++) {
+    console.log("length:", scrambleLength.value);
+    for (let i = 0; i < scrambleLength.value; i++) {
         const index = Math.floor(Math.random() * SNIPPETS.length);
         scramble += SNIPPETS[index];
         scramble += " ";
@@ -52,7 +56,55 @@ function getBeginnerAPBScramble(){
     return scramble;
 }
 
-function randomize(){
+function annotationToCount(annotation){
+    if (annotation == "2"){
+        return 2;
+    } else if (annotation == "'"){
+        return -1;
+    } else {
+        return 1;
+    }
+}
+
+function countToAnnotation(count){
+    switch (count){
+        case 3: return "'";
+        case 2: return "2";
+        case 1: return "";
+    }
+}
+
+function cleanScramble(scramble) {
+    console.log("original scramble:", scramble);
+    let totalTurns = 0;
+    let cleanScramble = "";
+    const moves = scramble.trim().split(" ");
+    for (let i = 0; i < moves.length; i++){
+        const move = moves[i];
+        const face = move[0];
+        const amount = annotationToCount(move[1]);
+        const nextFace = i == moves.length - 1 ? null : moves[i+1][0];
+
+        console.log(move, face, amount, "prior total:", totalTurns, "next face", nextFace);
+
+        if (i == moves.length - 1 || face !== nextFace){
+            // Add a new move to the final scramble
+            const finalCount = (totalTurns + amount + 44) % 4;
+            totalTurns = 0;
+            if (finalCount > 0){
+                cleanScramble += face + countToAnnotation(finalCount) + " "
+            }
+        } else {
+            // Keep tallying
+            totalTurns += amount;
+        }
+    }
+    
+    console.log("clean scramble:", cleanScramble);
+    return cleanScramble;
+}
+
+function randomize() {
     console.log("Random clicked");
 
     const scramble = isBeginnerAPB() ? getBeginnerAPBScramble() : getPetrusScramble();
@@ -67,6 +119,7 @@ function randomize(){
     cube.reset();
     cube.doScramble(scramble);
     image2.src = cube.getSource(isBeginnerAPB());
+    scrambleDiv.innerHTML = cleanScramble(scramble);
 
     image3.style.display = "none";
     image3.src = cube.getOrientedMask();
@@ -82,6 +135,9 @@ function test() {
     image.src = cube.getSource(isBeginnerAPB());
 }
 
+showScramble.addEventListener("change", () => {
+    scrambleDiv.style.display = showScramble.checked ? "block" : "none";
+})
 randomizeBtn.addEventListener("click", randomize);
 checkButton.addEventListener("click", showAnswer);
 

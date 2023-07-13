@@ -1,0 +1,42 @@
+html {
+    width: 500px;
+}
+
+body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    width: 500px;
+}
+
+#scramble {
+    margin: 20px 0;
+    font-weight: 700;
+}
+
+.slider {
+    /* Use flexbox for slider wrapper element */
+    display:flex;
+    /* Direct alignment of content along horizontal axis */
+    flex-direction:row;
+    /* Tell's flexbox to center content around the non-horizontal axis (ie around the vertical axis) */
+    align-items:center;
+}
+
+.images {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.settings {
+    width: 400px;
+    padding: 10px;
+    background-color: rgb(189, 220, 251);
+}
+.settings-row {
+    margin: 5px 0;
+}
+
+button {
+    padding: 6px;
+    font-size: 16px;
+}
