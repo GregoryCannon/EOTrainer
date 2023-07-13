@@ -74,8 +74,7 @@ function countToAnnotation(count){
     }
 }
 
-function cleanScramble(scramble) {
-    console.log("original scramble:", scramble);
+function cleanScrambleInternal(scramble) {
     let totalTurns = 0;
     let cleanScramble = "";
     const moves = scramble.trim().split(" ");
@@ -84,8 +83,6 @@ function cleanScramble(scramble) {
         const face = move[0];
         const amount = annotationToCount(move[1]);
         const nextFace = i == moves.length - 1 ? null : moves[i+1][0];
-
-        console.log(move, face, amount, "prior total:", totalTurns, "next face", nextFace);
 
         if (i == moves.length - 1 || face !== nextFace){
             // Add a new move to the final scramble
@@ -99,9 +96,21 @@ function cleanScramble(scramble) {
             totalTurns += amount;
         }
     }
-    
-    console.log("clean scramble:", cleanScramble);
     return cleanScramble;
+}
+
+function cleanScramble(scramble) {
+    console.log("original scramble:", scramble);
+    
+    let prevIteration = null;
+    let result = scramble;
+    while (result !== prevIteration){
+        console.log("Recursing...");
+        prevIteration = result;
+        result = cleanScrambleInternal(prevIteration);
+    }
+    console.log("clean scramble:", cleanScramble);
+    return result;
 }
 
 function randomize() {
@@ -141,6 +150,8 @@ showScramble.addEventListener("change", () => {
 randomizeBtn.addEventListener("click", randomize);
 checkButton.addEventListener("click", showAnswer);
 
-randomize();
+// randomize();
 // test();
 
+const testResult = cleanScramble("U R B' R B R' U2 U2 R' U R R' U2 R U' F R' F'");
+console.log(testResult);
