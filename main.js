@@ -150,8 +150,8 @@ showScramble.addEventListener("change", () => {
 randomizeBtn.addEventListener("click", randomize);
 checkButton.addEventListener("click", showAnswer);
 
-// randomize();
+randomize();
 // test();
 
-const testResult = cleanScramble("U R B' R B R' U2 U2 R' U R R' U2 R U' F R' F'");
-console.log(testResult);
+// const testResult = cleanScramble("U R B' R B R' U2 U2 R' U R R' U2 R U' F R' F'");
+// console.log(testResult);
