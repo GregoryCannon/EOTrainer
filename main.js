@@ -11,7 +11,7 @@ const scrambleLength = document.getElementById("scramble-length");
 const showScramble = document.getElementById("show-scramble");
 const SHOW_CONTROL = false;
 
-const SNIPPETS = ["R U'", "R' U2", "U' R2", "U R", "U' R", "U2 R'", "F U2 F'", "B U B'", "F' U F", "B U2 B'", "F R' F'", "B' R B", "F' B U' F B'", "F B' R F' B"];
+const SNIPPETS = ["R U'", "R' U2", "U' R2", "U R", "U' R", "U2 R'", "F' U2 F", "B U B'", "F' U F", "B U2 B'", "F R' F'", "B' R B", "F' B U' F B'", "F B' R F' B"];
 const SCRAMBLE_LENGTH = 8;
 const cube = new Cube();
 
