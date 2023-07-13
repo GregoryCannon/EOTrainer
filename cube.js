@@ -79,6 +79,12 @@ class Cube {
             case 15: return 9;
         }
     }
+    
+    isBREdge(edgeIndex){
+        const sticker = this.edges[edgeIndex];
+        const pSticker = this.edges[this.getPartner(edgeIndex)];
+        return (sticker == 'b' && pSticker == 'r') || (sticker == 'r' && pSticker == 'b');
+    }
 
     isOriented(edgeIndex){
         const sticker = this.edges[edgeIndex];
@@ -144,8 +150,12 @@ class Cube {
         }
     }
 
-    getSource(){
+    getSource(isBeginnerAPB){
         let str = "oooouooooooooroooooooffoffo".split("");
+
+        if (isBeginnerAPB){
+            str[17] = 'r'
+        }
 
         // This mapping is super manual because the internal model of the edges
         // follows BLD standard ordering, and VisualCube uses a weird order I don't like
