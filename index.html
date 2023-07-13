@@ -5,7 +5,7 @@
       </head> 
     <body>
         <h1>EO Trainer</h1>
-        <h6>Developed by Greg Cannon.</h6>
+        <h5>Developed by Greg Cannon.</h5>
         <h6>Note that while some cases are ambiguous, you can deduce much more than you think!</h6>
 
         <img id="image">
@@ -16,7 +16,9 @@
             <img id="image3">
         </div>
         
-        <div style="font-family: Arial, Helvetica, sans-serif;" id="scramble"></div>
+        <div id="scramble"></div>
+        <h6 id="scramble-disclaimer">(Scrambles do not take into account the corners, most noticeable in full EOPair scrambles.)</h6>
+
 
         <div class="settings">
             
@@ -32,7 +34,7 @@
                 <input type="range" id="scramble-length" min="2" max="10" value="5" class="slider" id="myRange">
             </div>
             <div class="settings-row">
-                <input checked type="checkbox" id="show-scramble">
+                <input type="checkbox" id="show-scramble">
                 <label for="show-scramble">Show scramble?</label>
             </div>
         </div>

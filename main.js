@@ -5,6 +5,7 @@ const image = document.getElementById("image");
 const image2 = document.getElementById("image2");
 const image3 = document.getElementById("image3");
 const scrambleDiv = document.getElementById("scramble");
+const scrambleDisclaimer = document.getElementById("scramble-disclaimer");
 const scrambleLength = document.getElementById("scramble-length");
 const showScramble = document.getElementById("show-scramble");
 const SHOW_CONTROL = false;
@@ -208,6 +209,7 @@ function showAnswer(){
 
 function updateScrambleVisibility(){
     scrambleDiv.style.display = showScramble.checked ? "block" : "none";
+    scrambleDisclaimer.style.display = showScramble.checked ? "block" : "none";
 }
 
 function test() {
