@@ -6,7 +6,8 @@
     <body>
         <h1>EO Trainer</h1>
         <h5>Developed by Greg Cannon.</h5>
-        <h6>Note that while some cases are ambiguous, you can deduce much more than you think!</h6>
+        <h6>Note: some cases can be ambiguous, unless "Mark F2L edges" is checked.</h6>
+        <h6>This simulates if you had tracked those edges from the previous step.</h6>
 
         <img id="image">
         <br/>
@@ -40,13 +41,13 @@
                 <input type="checkbox" id="show-arrows">
                 <label for="show-arrows">Mark F2L edges?</label>
             </div>
-            <div class="settings-row slider">
-                <label for="scramble-length">Scramble length:</label>
-                <input type="range" id="scramble-length" min="2" max="10" value="5" class="slider" id="myRange">
-            </div>
             <div class="settings-row">
                 <input type="checkbox" id="show-scramble">
                 <label for="show-scramble">Show scramble?</label>
+            </div>
+            <div class="settings-row slider" id="slider-container">
+                <label for="scramble-length">Scramble length:</label>
+                <input type="range" id="scramble-length" min="2" max="10" value="7" class="slider" id="myRange">
             </div>
         </div>
 

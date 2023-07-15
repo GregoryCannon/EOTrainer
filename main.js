@@ -7,6 +7,7 @@ const image3 = document.getElementById("image3");
 const scrambleDiv = document.getElementById("scramble");
 const scrambleDisclaimer = document.getElementById("scramble-disclaimer");
 const scrambleLength = document.getElementById("scramble-length");
+const sliderContainer = document.getElementById("slider-container")
 const showScramble = document.getElementById("show-scramble");
 const showArrows = document.getElementById("show-arrows");
 const cnType = document.getElementById("cn-type");
@@ -82,6 +83,7 @@ function showAnswer(){
 }
 
 function updateScrambleVisibility(){
+    sliderContainer.style.display = showScramble.checked ? "flex" : "none";
     scrambleDiv.style.display = showScramble.checked ? "block" : "none";
     scrambleDisclaimer.style.display = showScramble.checked ? "block" : "none";
 }

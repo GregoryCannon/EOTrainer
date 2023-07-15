@@ -241,6 +241,6 @@ class Cube {
             }
         }
 
-        return `https://visualcube.api.cubing.net/visualcube.php?fmt=svg&r=y35x-30&fd=${vcStringArray.join("")}&bg=t&sch=${selectedScheme}&arw=${arrows.join(",")}&ac=black`;
+        return `https://visualcube.api.cubing.net/visualcube.php?fmt=svg&r=y35x-30&fd=${vcStringArray.join("")}&bg=t&sch=${selectedScheme}&arw=${arrows.join(",")}&ac=fff`;
     }
 }
