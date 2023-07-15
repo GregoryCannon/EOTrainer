@@ -14,6 +14,24 @@ const SLICES = {
 }
 const DISPLAYED_EDGES = [0, 1, 2, 3, 8, 9, 12, 13, 14, 15];
 
+const COLOR_SCHEME_LOOKUP = {}
+COLOR_SCHEME_LOOKUP[CN_WB_ONLY] = ["ygrwbo"];
+COLOR_SCHEME_LOOKUP[CN_WHITE_ONLY] = [
+    "yrbwog",
+    "ybowgr",
+    "yogwrb",
+    "ygrwbo"
+]
+COLOR_SCHEME_LOOKUP[CN_X2Y] = [
+    "yrbwog",
+    "ybowgr",
+    "yogwrb",
+    "ygrwbo",
+    "wbrygo",
+    "wrgyob",
+    "wgoybr",
+    "wobyrg",
+]
 
 class Cube {
     constructor(){
@@ -86,6 +104,16 @@ class Cube {
         return (sticker == 'b' && pSticker == 'r') || (sticker == 'r' && pSticker == 'b');
     }
 
+    isFREdge(edgeIndex){
+        const sticker = this.edges[edgeIndex];
+        const pSticker = this.edges[this.getPartner(edgeIndex)];
+        return (sticker == 'f' && pSticker == 'r') || (sticker == 'r' && pSticker == 'f');
+    }
+
+    isF2LEdge(edgeIndex){
+        return this.isFREdge(edgeIndex) || this.isBREdge(edgeIndex);
+    }
+
     isOriented(edgeIndex){
         const sticker = this.edges[edgeIndex];
         const partnerIndex = this.getPartner(edgeIndex);
@@ -150,7 +178,27 @@ class Cube {
         }
     }
 
-    getSource(caseGroup){
+    getArrowStringForEdge(edgeIndex) {
+        // This mapping is super manual because the internal model of the edges
+        // follows BLD standard ordering, and VisualCube uses a weird order I don't like
+        switch (edgeIndex){
+            // U edges
+            case 0: return "U1U1";
+            // case 1: return "U5U5"; // redundant
+            case 2: return "U7U7";
+            case 3: return "U3U3";
+            // R edges
+            case 12: return "R1R1";
+            case 13: return "R5R5";
+            case 14: return "R7R7";
+            case 15: return "R3R3";
+            // F edges
+            // case 8: return "F1F1"; // redundant
+            // case 9: return "F5F5"; // redundant
+        }
+    }
+
+    getSource(caseGroup, colorNeutralType, showArrows){
         console.log("Case group:", caseGroup);
         let vcStringRaw = "oooouooooooooroooooooffoffo";
 
@@ -168,14 +216,31 @@ class Cube {
 
         }
 
-        const vcString = vcStringRaw.split("");
+        const vcStringArray = vcStringRaw.split("");
         // This mapping is super manual because the internal model of the edges
         // follows BLD standard ordering, and VisualCube uses a weird order I don't like
 
         for (const edgeIndex of DISPLAYED_EDGES){
-            vcString[this.getVcStringIndexForEdge(edgeIndex)] = this.edges[edgeIndex];
+            vcStringArray[this.getVcStringIndexForEdge(edgeIndex)] = this.edges[edgeIndex];
         }
 
-        return `https://visualcube.api.cubing.net/visualcube.php?fmt=svg&r=y35x-30&fd=${vcString.join("")}&bg=t`
+        // Select a random x2/y neutral color scheme
+        let colorSchemes = COLOR_SCHEME_LOOKUP[colorNeutralType];
+        if (!colorSchemes){
+            console.log("ERROR: no color schemes found for color neutral type", colorNeutralType);
+        }
+        const selectedScheme = colorSchemes[Math.floor(Math.random() * colorSchemes.length)];
+
+        // Add arrows for f2l edges
+        let arrows = [];
+        if (showArrows){
+            for (const edgeIndex of DISPLAYED_EDGES){
+                if (this.isF2LEdge(edgeIndex)){
+                    arrows.push(this.getArrowStringForEdge(edgeIndex));
+                }
+            }
+        }
+
+        return `https://visualcube.api.cubing.net/visualcube.php?fmt=svg&r=y35x-30&fd=${vcStringArray.join("")}&bg=t&sch=${selectedScheme}&arw=${arrows.join(",")}&ac=black`;
     }
 }

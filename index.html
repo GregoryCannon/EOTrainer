@@ -29,6 +29,17 @@
                     <option value="petrus">Petrus</option>
                 </select>
             </div>
+            <div class="settings-row">
+                Color neutral type: <select id="cn-type">
+                    <option value="wbonly">White-Blue only</option>
+                    <option value="whiteonly">White only</option>
+                    <option value="x2y">x2/y (White or Yellow)</option>
+                </select>
+            </div>
+            <div class="settings-row">
+                <input type="checkbox" id="show-arrows">
+                <label for="show-arrows">Mark F2L edges?</label>
+            </div>
             <div class="settings-row slider">
                 <label for="scramble-length">Scramble length:</label>
                 <input type="range" id="scramble-length" min="2" max="10" value="5" class="slider" id="myRange">
@@ -42,7 +53,9 @@
         <br/>
         <button id="random">Randomize</button>
         <button id="check">Check answer</button>
+        <script src="config.js"></script>
         <script src="cube.js"></script>
+        <script src="scrambles.js"></script>
         <script src="main.js"></script>
     </body>
 </html>
