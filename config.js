@@ -1,11 +1,11 @@
 const SHOW_CONTROL = false;
 
-const CASE_BEGINNER_INSERTED = "beginner-inserted";
-const CASE_PETRUS = "petrus";
-const CASE_BAD_U = "bad-u";
-const CASE_BAD_R = "bad-r";
-const CASE_ORIENTED_U = "oriented-u";
-const CASE_ORIENTED_R = "oriented-r";
+const SUBSET_PETRUS = -1;
+const SUBSET_BEGINNER = 0;
+const SUBSET_ORIENTED_U = 1;
+const SUBSET_ORIENTED_R = 2;
+const SUBSET_MISORIENTED_U = 3;
+const SUBSET_MISORIENTED_R = 4;
 
 const CN_WB_ONLY = "wbonly";
 const CN_WHITE_ONLY = "whiteonly";

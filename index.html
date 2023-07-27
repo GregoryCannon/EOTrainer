@@ -18,16 +18,36 @@
         </div>
         
         <div id="scramble"></div>
-        <h6 id="scramble-disclaimer">(Scrambles do not take into account the corners, most noticeable in full EOPair scrambles.)</h6>
 
+        <div id="solution-alg"></div>
 
         <div class="settings">
             
             <div class="settings-row">
-                Scramble type: <select id="scramble-type">
-                    <option value="apb-beginner">APB Pair Inserted</option>
-                    <option value="apb-full">APB Full EOPair</option>
+                Method type: <select id="scramble-type">
+                    <option value="apb-beginner">APB (Beginner)</option>
+                    <option value="apb-full">APB (Full)</option>
                     <option value="petrus">Petrus</option>
+                </select>
+            </div>
+            <div id="subsets-container">
+                <div id="subsets-title">Subsets:</div>
+                <div class="subsets-row">
+                    <input checked type="checkbox" id="box-mu">
+                    <label for="box-mu">Misoriented U</label>
+                </div>
+                <div class="subsets-row">
+                    <input checked type="checkbox" id="box-mr">
+                    <label for="box-mr">Misoriented R</label>
+                </div>
+                <div class="subsets-row">
+                    <input checked type="checkbox" id="box-ou">
+                    <label for="box-ou">Oriented U</label>
+                </div>
+                <div class="subsets-row">
+                    <input checked type="checkbox" id="box-or">
+                    <label for="box-or">Oriented R</label>
+                </div>
                 </select>
             </div>
             <div class="settings-row">
@@ -56,7 +76,8 @@
         <button id="check">Check answer</button>
         <script src="config.js"></script>
         <script src="cube.js"></script>
-        <script src="scrambles.js"></script>
+        <script src="scramble-data.js"></script>
+        <script src="scramble-picker.js"></script>
         <script src="main.js"></script>
     </body>
 </html>

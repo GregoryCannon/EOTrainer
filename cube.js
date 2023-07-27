@@ -3,14 +3,18 @@ const SPINS = {
     R: [12, 13, 14, 15],
     U: [0, 1, 2, 3],
     F: [8, 9, 10, 11],
-    B: [16, 17, 18, 19]
+    B: [16, 17, 18, 19],
+    D: [20, 21, 22, 23],
+    L: [4, 5, 6, 7]
 }
 // Each turn also slices stickers on adjacent faces
 const SLICES = {
     R: [1, 19, 21, 9],
     U: [16, 12, 8, 4],
     F: [2, 15, 20, 5],
-    B: [0, 7, 22, 13]
+    B: [0, 7, 22, 13],
+    D: [10, 14, 18, 6],
+    L: [3, 11, 23, 17]
 }
 const DISPLAYED_EDGES = [0, 1, 2, 3, 8, 9, 12, 13, 14, 15];
 
@@ -203,15 +207,15 @@ class Cube {
         let vcStringRaw = "oooouooooooooroooooooffoffo";
 
         switch(caseGroup){
-            case CASE_BEGINNER_INSERTED:
+            case SUBSET_BEGINNER:
                 vcStringRaw = "oooouooooooooroooroooffoffo"; break;
-            case CASE_ORIENTED_R:
+            case SUBSET_ORIENTED_R:
                 vcStringRaw = "oooouooodroooroooooobffoffo"; break;
-            case CASE_ORIENTED_U:
+            case SUBSET_ORIENTED_U:
                 vcStringRaw = "oooouooobdoooroooooorffoffo"; break;
-            case CASE_BAD_R:
+            case SUBSET_MISORIENTED_R:
                 vcStringRaw = "oodouooooooboroooroooffoffo"; break;
-            case CASE_BAD_U:
+            case SUBSET_MISORIENTED_U:
                 vcStringRaw = "oorouoooooodoroooroooffoffo"; break;
 
         }
@@ -219,7 +223,6 @@ class Cube {
         const vcStringArray = vcStringRaw.split("");
         // This mapping is super manual because the internal model of the edges
         // follows BLD standard ordering, and VisualCube uses a weird order I don't like
-
         for (const edgeIndex of DISPLAYED_EDGES){
             vcStringArray[this.getVcStringIndexForEdge(edgeIndex)] = this.edges[edgeIndex];
         }

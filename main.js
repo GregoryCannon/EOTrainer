@@ -5,20 +5,17 @@ const image = document.getElementById("image");
 const image2 = document.getElementById("image2");
 const image3 = document.getElementById("image3");
 const scrambleDiv = document.getElementById("scramble");
-const scrambleDisclaimer = document.getElementById("scramble-disclaimer");
+const solutionAlgDiv = document.getElementById("solution-alg");
 const scrambleLength = document.getElementById("scramble-length");
 const sliderContainer = document.getElementById("slider-container")
+const subsetsContainer = document.getElementById("subsets-container");
 const showScramble = document.getElementById("show-scramble");
 const showArrows = document.getElementById("show-arrows");
 const cnType = document.getElementById("cn-type");
 
 
-function isBeginnerAPB(){
-    return scrambleType.value == "apb-beginner";
-}
-
-function isAdvancedAPB(){
-    return scrambleType.value == "apb-full";
+function isPetrus(){
+    return scrambleType.value == "petrus";
 }
 
 function getColorNeutralType(){
@@ -50,42 +47,65 @@ function countToAnnotation(count){
 function randomize() {
     let scramble;
     let caseGroup;
-    if (isAdvancedAPB()){
-        const response = getAdvancedAPBScramble();
-        console.log(response);
-        [scramble, caseGroup] = response;
-    } else if (isBeginnerAPB()){
-        scramble = getBeginnerAPBScramble();
-        caseGroup = CASE_BEGINNER_INSERTED;
-    } else {
-        scramble = getPetrusScramble();
-        caseGroup = CASE_PETRUS;
+    let solutionAlg;
+
+    switch (scrambleType.value) {
+        case "petrus":
+            [scramble, caseGroup, _] = getPetrusScramble();
+            break;
+
+        case "apb-beginner":
+            [scramble, caseGroup, solutionAlg] = getApbScramble([1, 0, 0, 0, 0]);
+            break;
+
+        case "apb-full":
+            const inclusionArray = [
+                0,
+                document.getElementById("box-ou").checked ? 1 : 0,
+                document.getElementById("box-or").checked ? 1 : 0,
+                document.getElementById("box-mu").checked ? 1 : 0,
+                document.getElementById("box-mr").checked ? 1 : 0,
+            ];
+            [scramble, caseGroup, solutionAlg] = getApbScramble(inclusionArray);
+            break;
     }
 
-    console.log(scramble);
+    console.log("selected scramble:", scramble, "\n", caseGroup, "\n", solutionAlg);
     if (SHOW_CONTROL){
         image.src = `https://visualcube.api.cubing.net/visualcube.php?fmt=svg&r=y35x-30&alg=${scramble}&bg=t`
     } else {
-        image.style = "display: none";
+        image.style.visibility = "hidden";
     }
 
+    // Render cube and scramble
     const cube = new Cube();
     cube.doScramble(scramble);
     image2.src = cube.getSource(caseGroup, getColorNeutralType(), shouldShowArrows());
-    scrambleDiv.innerHTML = cleanScramble(scramble);
+    scrambleDiv.innerHTML = scramble;
+    solutionAlgDiv.innerHTML = "Solution: " + solutionAlg;
 
-    image3.style.display = "none";
-    image3.src = cube.getOrientedMask();
+    // Render the answer (after a delay)
+    image3.style.visibility = "hidden";
+    solutionAlgDiv.style.visibility = "hidden";
+    setTimeout(() => {
+        image3.src = cube.getOrientedMask();
+    }, 400); // We add delay so main image can load first (when the VisualCube servers are slow)
 }
 
 function showAnswer(){
-    image3.style.display = "block";
+    image3.style.visibility = "visible";
+    solutionAlgDiv.style.visibility = "visible";
 }
 
 function updateScrambleVisibility(){
-    sliderContainer.style.display = showScramble.checked ? "flex" : "none";
+    const shouldShowSlider = showScramble.checked && scrambleType.value === "petrus";
+    sliderContainer.style.display = shouldShowSlider ? "flex" : "none";
     scrambleDiv.style.display = showScramble.checked ? "block" : "none";
-    scrambleDisclaimer.style.display = showScramble.checked ? "block" : "none";
+}
+
+function onMethodUpdated() {
+    subsetsContainer.style.display = scrambleType.value === "apb-full" ? "inline-block" : "none";
+    updateScrambleVisibility();
 }
 
 // function test() {
@@ -95,12 +115,14 @@ function updateScrambleVisibility(){
 // }
 
 showScramble.addEventListener("change", updateScrambleVisibility);
+scrambleType.addEventListener("change", onMethodUpdated);
 randomizeBtn.addEventListener("click", randomize);
 checkButton.addEventListener("click", showAnswer);
 
 updateScrambleVisibility();
+onMethodUpdated();
 randomize();
 // test();
 
-// const testResult = cleanScramble("U R B' R B R' U2 U2 R' U R R' U2 R U' F R' F'");
-// console.log(testResult);
+const testResult = cleanScramble("F' U2 F F' U2 F ");
+console.log(testResult);
